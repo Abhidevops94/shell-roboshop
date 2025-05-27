@@ -49,7 +49,6 @@ VALIDATE $? "Editing mongodb conf file for remote connection"
 
 systemctl restart mongod &>>$LOG_FILE
 VALIDATE $? "restarting mongodb"
-done
 
 
 
