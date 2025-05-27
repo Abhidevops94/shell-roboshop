@@ -43,16 +43,23 @@ VALIDATE $? "Enabling required NodeJS module"
 dnf install nodejs -y &>>$LOG_FILE
 VALIDATE $? "Installing NodeJS"
 
-useradd --system --home /app --shell /sbin/nologin --comment "roboshop system user" roboshop &>>$LOG_FILE
-VALIDATE $? "Adding application User"
+id roboshop
+if [ $? -ne 0 ]
+then
+    useradd --system --home /app --shell /sbin/nologin --comment "roboshop system user" roboshop &>>$LOG_FILE
+    VALIDATE $? "Adding application User"
+else
+    echo -e "system user roboshop already created ...$Y SKIPPING $N"
+fi
 
-mkdir /app
+mkdir -p /app
 VALIDATE $? "Creating app directory"
 
 curl -o /tmp/catalogue.zip https://roboshop-artifacts.s3.amazonaws.com/catalogue-v3.zip &>>$LOG_FILE
 VALIDATE $? "Downloading the catalogue app code to created app directory"
 
-cd /app 
+rm -rf /app/*
+cd /app
 unzip /tmp/catalogue.zip &>>$LOG_FILE
 VALIDATE $? "Unziping catalogue"
 
@@ -71,8 +78,14 @@ cp $SCRIPT_DIR/mongodb.repo /etc/yum.repos.d/mongo.repo
 dnf install mongodb-mongosh -y &>>$LOG_FILE
 VALIDATE $? "Installing mongodb client"
 
-mongosh --host mongodb.abhi84s-daws.site </app/db/master-data.js &>>$LOG_FILE
-VALIDATE $? "Loading data into mongodb"
+STATUS=$(mongosh --host mongodb.abhi84s-daws.site --eval 'db.getMongo().getDBNames().indexOf("catalogue")')
+if [ $STATUS -lt 0]
+then
+    mongosh --host mongodb.abhi84s-daws.site </app/db/master-data.js &>>$LOG_FILE
+    VALIDATE $? "Loading data into mongodb"
+else
+    echo -e "DATA is already loaded ... $Y SKIPPING $N"
+fi
 
 
 
