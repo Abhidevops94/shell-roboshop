@@ -61,10 +61,10 @@ VALIDATE $? "Downloading the catalogue app code to created app directory"
 rm -rf /app/*
 cd /app
 unzip /tmp/catalogue.zip &>>$LOG_FILE
-VALIDATE $? "Unziping catalogue"
+VALIDATE $? "Unzipping catalogue"
 
 npm install &>>$LOG_FILE
-Validate $? "installing dependencies"
+VALIDATE $? "installing dependencies"
 
 cp $SCRIPT_DIR/catalogue.service /etc/systemd/system/catalogue.service
 VALIDATE $? "Copying catalogue service"
