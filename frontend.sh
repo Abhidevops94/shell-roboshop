@@ -53,7 +53,7 @@ VALIDATE $? "Enabled and starting ngnix service"
 rm -rf /usr/share/nginx/html/* &>>$LOG_FILE
 VALIDATE $? "Removing the default content that web server is serving"
 
-curl -o /tmp/frontend.zip https://roboshop-artifacts.s3.amazonaws.com/frontend-v3.zip
+curl -o /tmp/frontend.zip https://roboshop-artifacts.s3.amazonaws.com/frontend-v3.zip &>>$LOG_FILE
 VALIDATE $? "Downloading the frontend content"
 
 cd /usr/share/nginx/html 
