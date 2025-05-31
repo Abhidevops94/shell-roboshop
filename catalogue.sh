@@ -13,7 +13,7 @@ dnf install mongodb-mongosh -y &>>$LOG_FILE
 VALIDATE $? "Installing mongodb client"
 
 STATUS=$(mongosh --host mongodb.abhi84s-daws.site --eval 'db.getMongo().getDBNames().indexOf("catalogue")')
-if [ $STATUS -lt 0]
+if [ $STATUS -lt 0 ]
 then
     mongosh --host mongodb.abhi84s-daws.site </app/db/master-data.js &>>$LOG_FILE
     VALIDATE $? "Loading data into mongodb"
